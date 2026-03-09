@@ -1,0 +1,153 @@
+/* Fondo oscuro con desenfoque (Glassmorphism) */
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;  /* Actualizado para asegurar pantalla completa */
+  height: 100vh; /* Actualizado para asegurar pantalla completa */
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9999; /* Actualizado para asegurar que tape el Navbar (que tiene 1000) */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.auth-card {
+  background: #111;
+  width: 90%;
+  max-width: 400px;
+  padding: 40px;
+  border-radius: 4px;
+  border: 1px solid #D4AF37; /* Actualizado sutilmente al tono dorado de tu paleta */
+  position: relative;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.btn-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-close:hover {
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+/* Tipografía */
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header h2 {
+  font-family: var(--font-serif);
+  color: var(--gold);
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.auth-header p {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Inputs elegantes */
+.input-group {
+  position: relative;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #444;
+  transition: 0.3s;
+}
+
+.input-group:focus-within {
+  border-bottom-color: var(--gold);
+}
+
+.input-icon {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  color: #666;
+  transition: 0.3s;
+}
+
+.input-group:focus-within .input-icon {
+  color: var(--gold);
+}
+
+.input-group input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 10px 10px 10px 35px; /* Espacio para el icono */
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+}
+
+/* Botón Dorado */
+.btn-submit {
+  width: 100%;
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.btn-submit:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* Switcher footer */
+.auth-footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.auth-footer span {
+  color: var(--gold);
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.auth-footer span:hover {
+  text-decoration: underline;
+}
+
+/* Animación simple */
+.slide-in {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

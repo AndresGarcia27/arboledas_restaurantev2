@@ -1,0 +1,54 @@
+/* src/sections/Chef.css */
+.chef-section {
+  padding: 100px 0;
+  background-color: #1a1a1a; /* Un poco más claro que el fondo negro */
+  position: relative;
+  overflow: hidden;
+}
+
+.chef-container {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap; /* Para que se adapte a celular */
+}
+
+.chef-image {
+  flex: 1;
+  min-width: 300px;
+}
+
+.chef-image img {
+  width: 100%;
+  border-radius: 4px;
+  filter: grayscale(100%); /* Efecto blanco y negro elegante */
+  transition: filter 0.5s ease;
+}
+
+.chef-image:hover img {
+  filter: grayscale(0%); /* Vuelve a color al pasar el mouse */
+}
+
+.chef-info {
+  flex: 1;
+  text-align: left;
+}
+
+.chef-info h2 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chef-info p {
+  line-height: 1.8;
+  color: var(--text-gray);
+  margin-bottom: 2rem;
+}
+
+/* Firma del chef (simulada con fuente cursiva si quisieras) */
+.signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: var(--gold);
+  margin-top: 20px;
+}

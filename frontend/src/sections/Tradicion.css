@@ -1,0 +1,85 @@
+.tradicion-section {
+  padding: 120px 0;
+  background-color: #161616; /* Un gris muy oscuro, casi negro */
+  overflow: hidden;
+}
+
+.tradicion-container {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+/* Estilos del Texto */
+.tradicion-text {
+  flex: 1;
+  min-width: 300px;
+}
+
+.tradicion-text h2 {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.tradicion-text h3 {
+  font-size: 3.5rem;
+  margin-bottom: 30px;
+  color: var(--gold);
+}
+
+.tradicion-text p {
+  color: #ccc;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  font-size: 1.05rem;
+}
+
+.btn-story {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 12px 30px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-story:hover {
+  background: var(--gold);
+  color: #000;
+}
+
+/* Estilos de las Imágenes (Efecto Collage) */
+.tradicion-images {
+  flex: 1;
+  position: relative;
+  min-width: 300px;
+  height: 500px;
+}
+
+.img-main {
+  width: 80%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 4px;
+  filter: brightness(0.8);
+}
+
+.img-accent {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+  border: 5px solid #161616; /* Crea un borde del color del fondo */
+  border-radius: 4px;
+  box-shadow: -10px -10px 30px rgba(0,0,0,0.5);
+}

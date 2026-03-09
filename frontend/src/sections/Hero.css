@@ -1,0 +1,117 @@
+/* src/sections/Hero.css */
+
+.hero-container {
+  height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+  width: 100%;
+  position: relative;
+  /* Imagen conceptual elegante. Reemplázala por la tuya si tienes una */
+  background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1920&auto=format&fit=crop');
+  background-size: cover; /* La imagen cubre todo el espacio */
+  background-position: center; /* Centra la imagen */
+  background-attachment: fixed; /* Efecto Parallax (opcional) */
+  display: flex;
+  align-items: center; /* Centra verticalmente */
+  justify-content: center; /* Centra horizontalmente */
+  margin-top: -80px; /* Ajuste si tu Navbar es transparente y mide 80px */
+}
+
+/* Capa oscura para que el texto resalte */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Negro con 60% de opacidad */
+  z-index: 1;
+}
+
+/* Contenedor del texto y botones */
+.hero-content {
+  position: relative;
+  z-index: 2; /* Por encima de la capa oscura */
+  text-align: center;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.hero-tagline {
+  font-family: var(--font-sans); /* Montserrat */
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.hero-content h1 {
+  font-family: var(--font-serif); /* Playfair Display */
+  color: var(--white); /* El título grande en blanco */
+  font-size: 7rem; /* Tamaño extra grande */
+  font-weight: 700;
+  margin-bottom: 30px;
+  letter-spacing: -2px;
+}
+
+.hero-desc {
+  font-family: var(--font-sans);
+  color: var(--text-gray);
+  font-size: 1.2rem;
+  font-weight: 300;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+/* Sección de botones */
+.hero-btns {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Botón Dorado Relleno */
+.btn-gold-fill {
+  background-color: var(--gold);
+  color: #000;
+  font-family: var(--font-sans);
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 15px 35px;
+  border-radius: 5px;
+  border: 2px solid var(--gold);
+  transition: 0.3s;
+}
+
+.btn-gold-fill:hover {
+  background-color: transparent;
+  color: var(--gold);
+}
+
+/* Botón Dorado Contorno */
+.btn-gold-outline {
+  background-color: transparent;
+  color: var(--gold);
+  font-family: var(--font-sans);
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 15px 35px;
+  border-radius: 5px;
+  border: 2px solid var(--gold);
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.btn-gold-outline:hover {
+  background-color: var(--gold);
+  color: #000;
+}
+
+/* Animación de entrada */
+.fade-in {
+  animation: fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
