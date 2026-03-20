@@ -10,20 +10,25 @@ export default function Navbar() {
   const [user, setUser] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const { cart } = useCart();
-  const itemCount = cart.reduce((acc, item) => acc + item.cantidad, 0);
+  const cartContext = useCart() || {};
+  const cart = cartContext.cart || []; 
+  const itemCount = Array.isArray(cart) ? cart.reduce((acc, item) => acc + item.cantidad, 0) : 0;
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) setUser(JSON.parse(loggedInUser));
+    if (loggedInUser && loggedInUser !== "undefined") {
+      setUser(JSON.parse(loggedInUser));
+    }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    localStorage.clear();
     setUser(null);
     navigate('/login');
     window.location.reload();
   };
+
+  const userRole = user ? Number(user.rol || user.rol_id) : null;
 
   return (
     <>
@@ -41,14 +46,22 @@ export default function Navbar() {
           <div className="nav-auth">
             {user ? (
               <div className="user-profile">
-                {user.rol === '1' && (
+                {userRole === 2 && (
                   <div className="cart-icon-container" onClick={() => setIsCartOpen(true)} style={{ cursor: 'pointer', position: 'relative', marginRight: '25px' }}>
                     <ShoppingCart size={24} color="#d4af37" />
                     {itemCount > 0 && <span className="cart-badge-navbar">{itemCount}</span>}
                   </div>
                 )}
-                <span className="welcome-text">HOLA, {user.nombre}</span>
-                {user.rol === '2' && <Link to="/listado-clientes" className="btn-admin-panel">GESTIÓN</Link>}
+
+                <span className="welcome-text">HOLA, {user.nombre.toUpperCase()}</span>
+
+                {/* ✅ BOTÓN CORREGIDO: Apunta a la ruta exacta de App.jsx */}
+                {userRole === 1 && (
+                  <Link to="/listado-clientes" className="btn-admin-panel">
+                    GESTIÓN
+                  </Link>
+                )}
+
                 <button onClick={handleLogout} className="btn-logout">CERRAR SESIÓN</button>
               </div>
             ) : (

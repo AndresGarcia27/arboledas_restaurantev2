@@ -5,11 +5,26 @@ import '../Admin.css';
 export default function RegistroCliente() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ nombre: '', email: '', password: '', telefono: '' });
+  const [errores, setErrores] = useState({});
+  
+  // 👇 NUEVOS ESTADOS PARA LA VERIFICACIÓN
+  const [paso, setPaso] = useState(1); // Paso 1 = Registro, Paso 2 = Verificación
+  const [codigoVerificacion, setCodigoVerificacion] = useState('');
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    let valor = e.target.value;
+    if (e.target.name === 'nombre') {
+      valor = valor.trimStart(); 
+    }
+    setFormData({ ...formData, [e.target.name]: valor });
+    if (errores[e.target.name]) setErrores({ ...errores, [e.target.name]: null });
+  };
 
-  const handleSubmit = async (e) => {
+  // PASO 1: ENVIAR DATOS DE REGISTRO
+  const handleSubmitRegistro = async (e) => {
     e.preventDefault();
+    setErrores({}); 
+
     try {
       const response = await fetch('http://127.0.0.1:8000/api/clientes', {
         method: 'POST',
@@ -20,37 +35,120 @@ export default function RegistroCliente() {
       const data = await response.json();
 
       if (response.ok) {
-        alert('¡Bienvenido a Arboleda\'s! Ahora inicia sesión.');
-        navigate('/login');
+        // ¡Éxito! Cambiamos a la pantalla del código
+        setPaso(2);
       } else {
-        const errorMsg = data.errores_validacion 
-          ? Object.values(data.errores_validacion).flat().join('\n') 
-          : 'Error en el registro';
-        alert(errorMsg);
+        if (data.errores) setErrores(data.errores);
+        else alert(data.mensaje || 'Error en el registro');
       }
     } catch (error) {
-      alert('Error de conexión con el servidor');
+      alert('Error de conexión con el servidor.');
+    }
+  };
+
+  // PASO 2: VERIFICAR EL CÓDIGO
+  const handleSubmitVerificacion = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/clientes/verificar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          codigo: codigoVerificacion
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('¡Cuenta verificada con éxito! Bienvenido a Arboleda\'s.');
+        navigate('/login');
+      } else {
+        alert(data.mensaje || 'Código incorrecto. Inténtalo de nuevo.');
+      }
+    } catch (error) {
+      alert('Error al verificar el código.');
     }
   };
 
   return (
     <main className="admin-page">
       <section className="admin-card">
-        <header className="admin-header"><h2>Registro Arboleda</h2></header>
-        <form onSubmit={handleSubmit} className="admin-form">
-          <label>Nombre Completo</label>
-          <input type="text" name="nombre" onChange={handleChange} required />
-          <label>Email</label>
-          <input type="email" name="email" onChange={handleChange} required />
-          <label>Contraseña (mín 6)</label>
-          <input type="password" name="password" onChange={handleChange} required />
-          <label>Teléfono</label>
-          <input type="tel" name="telefono" onChange={handleChange} required />
-          <button type="submit" className="btn-primary">Crear Mi Cuenta</button>
-          <footer className="link-footer">
-            <Link to="/login" className="btn-secondary">¿Ya eres parte? Inicia Sesión</Link>
-          </footer>
-        </form>
+        
+        {paso === 1 ? (
+          // ---------------- PANTALLA 1: REGISTRO ----------------
+          <>
+            <header className="admin-header"><h2>Registro Arboleda</h2></header>
+            <form onSubmit={handleSubmitRegistro} className="admin-form">
+              
+              <label>Nombre Completo</label>
+              <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required 
+                style={{ borderColor: errores.nombre ? '#f44336' : '#ccc', outline: 'none' }}
+                onInvalid={(e) => e.target.setCustomValidity('Por favor, indícanos cómo te llamas.')}
+                onInput={(e) => e.target.setCustomValidity('')} 
+              />
+              {errores.nombre && <span style={{color: '#f44336', fontSize: '0.85rem', marginTop: '-10px', marginBottom: '10px', display: 'block'}}>{errores.nombre[0]}</span>}
+
+              <label>Email</label>
+              <input type="email" name="email" value={formData.email} onChange={handleChange} required 
+                style={{ borderColor: errores.email ? '#f44336' : '#ccc', outline: 'none' }}
+                onInvalid={(e) => e.target.setCustomValidity('Necesitamos un correo válido para contactarte.')}
+                onInput={(e) => e.target.setCustomValidity('')}
+              />
+              {errores.email && <span style={{color: '#f44336', fontSize: '0.85rem', marginTop: '-10px', marginBottom: '10px', display: 'block'}}>{errores.email[0]}</span>}
+
+              <label>Contraseña (mín 6 caracteres)</label>
+              <input type="password" name="password" value={formData.password} onChange={handleChange} required 
+                style={{ borderColor: errores.password ? '#f44336' : '#ccc', outline: 'none' }}
+                onInvalid={(e) => e.target.setCustomValidity('Crea una contraseña segura para tu cuenta.')}
+                onInput={(e) => e.target.setCustomValidity('')}
+              />
+              {errores.password && <span style={{color: '#f44336', fontSize: '0.85rem', marginTop: '-10px', marginBottom: '10px', display: 'block'}}>{errores.password[0]}</span>}
+
+              <label>Teléfono</label>
+              <input type="tel" name="telefono" value={formData.telefono} onChange={handleChange} required 
+                style={{ borderColor: errores.telefono ? '#f44336' : '#ccc', outline: 'none' }}
+                onInvalid={(e) => e.target.setCustomValidity('Déjanos un número de teléfono para tus reservas.')}
+                onInput={(e) => e.target.setCustomValidity('')}
+              />
+              {errores.telefono && <span style={{color: '#f44336', fontSize: '0.85rem', marginTop: '-10px', marginBottom: '10px', display: 'block'}}>{errores.telefono[0]}</span>}
+
+              <button type="submit" className="btn-primary" style={{marginTop: '10px'}}>Crear Mi Cuenta</button>
+              
+              <footer className="link-footer">
+                <Link to="/login" className="btn-secondary">¿Ya eres parte? Inicia Sesión</Link>
+              </footer>
+            </form>
+          </>
+        ) : (
+          // ---------------- PANTALLA 2: VERIFICACIÓN ----------------
+          <>
+            <header className="admin-header"><h2>Verifica tu Correo</h2></header>
+            <form onSubmit={handleSubmitVerificacion} className="admin-form" style={{textAlign: 'center'}}>
+              <p style={{marginBottom: '20px', color: '#555'}}>
+                Hemos enviado un código de 6 dígitos a <strong>{formData.email}</strong>. 
+                Por favor, revísalo e ingrésalo aquí.
+              </p>
+
+              <input 
+                type="text" 
+                maxLength="6" 
+                value={codigoVerificacion} 
+                onChange={(e) => setCodigoVerificacion(e.target.value.replace(/\D/g, ''))} // Solo permite números
+                placeholder="000000"
+                required
+                style={{ 
+                  fontSize: '2rem', textAlign: 'center', letterSpacing: '10px', padding: '15px', 
+                  borderRadius: '10px', border: '2px solid #d4af37', marginBottom: '20px' 
+                }}
+              />
+
+              <button type="submit" className="btn-primary">Verificar Cuenta</button>
+            </form>
+          </>
+        )}
+
       </section>
     </main>
   );

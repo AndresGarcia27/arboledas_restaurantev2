@@ -1,119 +1,177 @@
-/* Configuración base de la barra */
-.navbar {
+/* --- CONFIGURACIÓN GENERAL --- */
+:root {
+  --gold: #d4af37;
+  --dark-bg: rgba(10, 10, 10, 0.95);
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Montserrat', sans-serif;
+}
+
+/* --- BARRA DE NAVEGACIÓN --- */
+.navbar-arboleda {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   padding: 20px 0;
   z-index: 1000;
-  transition: all 0.3s ease;
-  background: transparent;
+  background: var(--dark-bg); /* O puedes usar transparent y añadir la clase .scrolled con JS */
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
 
-.navbar.scrolled {
-  background: rgba(10, 10, 10, 0.95); /* Negro casi opaco */
-  padding: 15px 0;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  backdrop-filter: blur(5px);
-}
-
-.navbar-content {
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between; /* Logo a un lado, links al otro */
-  align-items: center; /* Alineación vertical perfecta */
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
 }
 
-/* Logo */
-.logo {
+/* --- LOGO Y MENÚ IZQUIERDO --- */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-logo {
   font-family: var(--font-serif);
   font-size: 1.8rem;
   font-weight: bold;
   letter-spacing: 4px;
   color: #fff;
   text-decoration: none;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
-/* Contenedor de los enlaces */
-.nav-links {
+.nav-menu {
   display: flex;
-  gap: 35px; /* Espacio entre palabras */
-  list-style: none;
-  align-items: center; /* Vital para que el botón no se vea más arriba o abajo */
-  margin: 0;
-  padding: 0;
+  gap: 25px;
 }
 
-/* Enlaces de texto (Inicio, Carta...) */
-.nav-links a {
+.nav-menu a {
   color: #e0e0e0;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   transition: color 0.3s;
-  position: relative;
-  font-family: var(--font-sans);
   font-weight: 500;
 }
 
-.nav-links a:hover {
+.nav-menu a:hover {
   color: var(--gold);
 }
 
-/* Pequeña línea dorada al pasar el mouse por los enlaces */
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -5px;
-  left: 0;
-  background-color: var(--gold);
-  transition: width 0.3s;
-}
-
-.nav-links a:hover::after {
-  width: 100%;
-}
-
-/* Separador vertical pequeño */
-.divider {
-  width: 1px;
-  height: 20px;
-  background-color: #444;
-  margin: 0 5px; /* Un poco de aire extra alrededor del separador */
-}
-
-/* --- BOTÓN DE INICIO DE SESIÓN --- */
-.btn-login {
+/* --- SECCIÓN DE USUARIO / AUTH --- */
+.nav-auth {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: transparent;
-  border: 1px solid var(--gold); /* Borde dorado fino */
-  color: var(--gold);
-  padding: 8px 22px;
-  border-radius: 50px; /* Redondo y elegante */
-  cursor: pointer;
-  font-family: var(--font-sans);
-  text-transform: uppercase;
+  gap: 20px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.welcome-text {
+  color: #fff;
   font-size: 0.8rem;
   letter-spacing: 1px;
+  border-right: 1px solid #444;
+  padding-right: 20px;
+}
+
+/* --- BOTONES ESPECIALES --- */
+
+/* Botón de Gestión (ADMIN) */
+.btn-admin-panel {
+  background-color: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 8px 18px;
+  border-radius: 4px;
   font-weight: bold;
+  font-size: 0.75rem;
+  text-decoration: none;
+  text-transform: uppercase;
   transition: all 0.3s ease;
 }
 
-.btn-login:hover {
-  background: var(--gold);
-  color: #000; /* Texto negro sobre fondo dorado */
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); /* Resplandor */
-  transform: translateY(-2px);
+.btn-admin-panel:hover {
+  background-color: var(--gold);
+  color: #000;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
-/* Responsivo (Celulares) */
-@media (max-width: 900px) {
-  .nav-links {
-    display: none; /* Por ahora oculto en móviles */
-  }
+/* Botón Cerrar Sesión */
+.btn-logout {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.btn-logout:hover {
+  color: #ff4d4d;
+}
+
+/* Botón Acceder (Dorado) */
+.btn-acceder-gold {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: #000;
+  padding: 10px 25px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.btn-acceder-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* --- CARRITO NOTIFICACIÓN --- */
+.cart-badge-navbar {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: #ff4d4d;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+  border: 2px solid #0a0a0a;
+}
+/* --- ENLACES DE AUTENTICACIÓN (CUANDO NO HAY SESIÓN) --- */
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.link-simple {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.link-simple:hover {
+  color: var(--gold);
 }

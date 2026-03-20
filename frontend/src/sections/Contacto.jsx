@@ -6,14 +6,20 @@ import './Contacto.css';
 
 export const Contacto = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user'));
+  
+  // ✅ 1. BLINDAJE DE LOCALSTORAGE: Ignoramos la "basura" si existe
+  const storedUser = localStorage.getItem('user');
+  const user = (storedUser && storedUser !== "undefined") ? JSON.parse(storedUser) : null;
+
+  // ✅ 2. EXTRACCIÓN SEGURA DEL ROL
+  const userRole = user ? Number(user.rol || user.rol_id) : null;
 
   return (
     <footer id="contacto" className="contacto-section">
       <div className="container">
         
-        {/* Acceso discreto para Admin */}
-        {user?.rol === '2' && (
+        {/* Acceso discreto para Admin (Corregido a Rol 1) */}
+        {userRole === 1 && (
           <div className="admin-access-footer">
             <Link to="/listado-clientes" className="btn-admin-link">
               Gestión de Clientes

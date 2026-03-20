@@ -11,6 +11,9 @@ import ListadoClientes from './pages/ListadoClientes';
 import EditarCliente from './pages/EditarCliente';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
+// Asegúrate de que la ruta del archivo PanelCliente sea correcta según donde lo guardaste
+import PanelCliente from './components/PanelCliente'; 
+
 const PaginaRestaurante = () => (
   <>
     <Navbar />
@@ -38,6 +41,14 @@ function App() {
         } />
         
         <Route path="/editar-cliente/:id" element={<EditarCliente />} />
+
+        {/* 👇 NUEVA RUTA PARA EL CLIENTE 👇 */}
+        <Route path="/mis-reservas" element={
+          <ProtectedRoute>
+            <PanelCliente />
+          </ProtectedRoute>
+        } />
+
       </Routes>
     </BrowserRouter>
   );

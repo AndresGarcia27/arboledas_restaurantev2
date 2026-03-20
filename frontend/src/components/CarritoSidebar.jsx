@@ -4,8 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import './CarritoSidebar.css';
 
 export default function CarritoSidebar({ isOpen, onClose }) {
-  const { cart, addToCart, removeFromCart, totalPrecio, clearCart } = useCart();
+  // 1. BLINDAJE AL CONTEXTO: Añadimos || {} por si el contexto falla
+  const { cart, addToCart, removeFromCart, totalPrecio, clearCart } = useCart() || {};
   const navigate = useNavigate();
+
+  // 2. BLINDAJE A LOS DATOS: Garantizamos que cart sea un arreglo y totalPrecio un número
+  const safeCart = Array.isArray(cart) ? cart : [];
+  const safeTotal = typeof totalPrecio === 'number' ? totalPrecio : 0;
 
   if (!isOpen) return null;
 
@@ -29,25 +34,28 @@ export default function CarritoSidebar({ isOpen, onClose }) {
         </header>
 
         <div className="cart-body">
-          {cart.length === 0 ? (
+          {/* Usamos safeCart en lugar de cart */}
+          {safeCart.length === 0 ? (
             <div className="empty-cart">
               <p>Aún no has añadido delicias de la Arboleda.</p>
             </div>
           ) : (
-            cart.map((item) => (
+            safeCart.map((item) => (
               <div key={item.id} className="cart-item">
                 <img src={item.img} alt={item.nombre} className="cart-item-img" />
                 <div className="cart-item-info">
                   <h4>{item.nombre}</h4>
-                  <p className="cart-item-price">${item.precio.toLocaleString()}</p>
+                  {/* Blindamos el precio de cada item por si acaso */}
+                  <p className="cart-item-price">${(item.precio || 0).toLocaleString()}</p>
                   
                   <div className="cart-item-actions">
                     <div className="quantity-controls">
-                      <button onClick={() => removeFromCart(item.id, false)}><Minus size={14} /></button>
+                      {/* Nos aseguramos de que las funciones existan antes de ejecutarlas */}
+                      <button onClick={() => removeFromCart && removeFromCart(item.id, false)}><Minus size={14} /></button>
                       <span>{item.cantidad}</span>
-                      <button onClick={() => addToCart(item)}><Plus size={14} /></button>
+                      <button onClick={() => addToCart && addToCart(item)}><Plus size={14} /></button>
                     </div>
-                    <button className="btn-remove" onClick={() => removeFromCart(item.id, true)}>
+                    <button className="btn-remove" onClick={() => removeFromCart && removeFromCart(item.id, true)}>
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -57,11 +65,12 @@ export default function CarritoSidebar({ isOpen, onClose }) {
           )}
         </div>
 
-        {cart.length > 0 && (
+        {safeCart.length > 0 && (
           <footer className="cart-footer">
             <div className="total-row">
               <span>Total a pagar:</span>
-              <span className="total-amount">${totalPrecio.toLocaleString()}</span>
+              {/* Usamos safeTotal para evitar errores en toLocaleString */}
+              <span className="total-amount">${safeTotal.toLocaleString()}</span>
             </div>
             <button className="btn-checkout" onClick={handleCheckout}>
               PROCEDER AL PAGO
