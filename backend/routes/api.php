@@ -19,7 +19,9 @@ use App\Http\Controllers\ReservaController;
 // Dejamos solo un login, apuntando al AuthController que tiene los superpoderes de Sanctum
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/registro', [ApiClienteController::class, 'store']);
-
+Route::post('/crear-preferencia', [App\Http\Controllers\ApiPedidoController::class, 'crearPreferencia']);
+Route::post('/checkout', [App\Http\Controllers\ApiPedidoController::class, 'procesarCheckout']);
+Route::get('/pedidos', [App\Http\Controllers\ApiPedidoController::class, 'index']);
 /* --- RECURSOS API --- */
 Route::apiResource('clientes', ApiClienteController::class);
 

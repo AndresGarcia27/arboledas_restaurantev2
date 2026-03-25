@@ -6,15 +6,15 @@ use App\Models\Reserva;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log; // 👈 Para guardar errores de correo en secreto sin romper la app
 
 class ReservaController extends Controller
 {
-    // Mostrar reservas (Si es admin ve todas, si es cliente ve solo las suyas)
+    // Mostrar reservas
     public function index(Request $request)
     {
         $query = Reserva::with('cliente')->orderBy('fecha', 'desc')->orderBy('hora', 'desc');
 
-        // Si React nos manda un ID específico, filtramos la tabla
         if ($request->has('cliente_id')) {
             $query->where('cliente_id', $request->cliente_id);
         }
@@ -22,7 +22,7 @@ class ReservaController extends Controller
         return response()->json($query->get(), 200);
     }
 
-    // Crear una nueva reserva y enviar correo
+    // 1. Crear la reserva (¡SIN ENVIAR CORREO!)
     public function store(Request $request)
     {
         $request->validate([
@@ -38,55 +38,55 @@ class ReservaController extends Controller
             $data['estado'] = 'pendiente'; 
         }
 
-        // 👇 Búsqueda BLINDADA del cliente
-        $cliente = Cliente::where('cliente_id', $data['cliente_id'])->first();
-        if (!$cliente) {
-            $cliente = Cliente::find($data['cliente_id']);
-        }
+        $cliente = Cliente::where('cliente_id', $data['cliente_id'])->first() ?? Cliente::find($data['cliente_id']);
 
-        // 🚨 TRAMPA 1: Si no encuentra al cliente, lanzamos error y frenamos todo
         if (!$cliente) {
             return response()->json([
                 'mensaje' => 'Error: El sistema no detectó tu ID de cliente. Cierra sesión y vuelve a entrar.'
             ], 400);
         }
 
-        // Si lo encuentra, creamos la reserva en la base de datos
+        // Solo guardamos en la base de datos, silenciosamente
         $reserva = Reserva::create($data);
 
-        $mensaje = "Hola {$cliente->nombre},\n\n";
-        $mensaje .= "¡Hemos recibido tu solicitud de reserva en Arboleda's!\n\n";
-        $mensaje .= "Tus detalles:\n";
-        $mensaje .= "📅 Fecha: {$reserva->fecha}\n";
-        $mensaje .= "⏰ Hora: {$reserva->hora}\n";
-        $mensaje .= "👥 Personas: {$reserva->personas}\n";
-        $mensaje .= "📌 Estado: PENDIENTE (Te confirmaremos muy pronto)\n\n";
-        $mensaje .= "¡Gracias por preferirnos!";
-
-        // 🚨 TRAMPA 2: Intentamos enviar el correo. Si falla, avisamos el porqué exacto.
-        try {
-            Mail::raw($mensaje, function ($mail) use ($cliente) {
-                $mail->to($cliente->email)
-                     ->subject("Confirmación de Reserva - Arboleda's");
-            });
-        } catch (\Exception $e) {
-            // Si el correo falla, borramos la reserva para que no quede huérfana
-            $reserva->delete();
-            return response()->json([
-                'mensaje' => 'Error al intentar enviar el correo de confirmación con Gmail.',
-                'error_detalle' => $e->getMessage()
-            ], 500);
-        }
-
-        // Si sobrevive a todas las trampas, es un éxito total
         return response()->json($reserva, 201);
     }
 
-    // Actualizar una reserva
+    // 2. Actualizar reserva (¡AQUÍ SE ENVÍA EL CORREO SI SE CONFIRMA!)
     public function update(Request $request, $id)
     {
         $reserva = Reserva::findOrFail($id);
+        $estadoAnterior = $reserva->estado; // Guardamos cómo estaba antes
+
+        // Actualizamos con los datos que mande el Admin (ej. estado: 'confirmada')
         $reserva->update($request->all());
+
+        // Si el admin la cambió a 'confirmada' y ANTES no estaba confirmada, disparamos el correo
+        if ($estadoAnterior !== 'confirmada' && $reserva->estado === 'confirmada') {
+            
+            $cliente = Cliente::where('cliente_id', $reserva->cliente_id)->first() ?? Cliente::find($reserva->cliente_id);
+
+            if ($cliente) {
+                $mensaje = "Hola {$cliente->nombre},\n\n";
+                $mensaje .= "¡Excelentes noticias! Tu reserva en Arboleda's ha sido CONFIRMADA.\n\n";
+                $mensaje .= "Tus detalles oficiales:\n";
+                $mensaje .= "📅 Fecha: {$reserva->fecha}\n";
+                $mensaje .= "⏰ Hora: {$reserva->hora}\n";
+                $mensaje .= "👥 Personas: {$reserva->personas}\n\n";
+                $mensaje .= "¡Te esperamos con los brazos abiertos para que disfrutes de la mejor experiencia!";
+
+                try {
+                    Mail::raw($mensaje, function ($mail) use ($cliente) {
+                        $mail->to($cliente->email)
+                             ->subject("¡Reserva Confirmada! Nos vemos en Arboleda's");
+                    });
+                } catch (\Exception $e) {
+                    // Si el correo falla, guardamos el error en los logs de Laravel pero no le lanzamos error al admin
+                    Log::error("Error al enviar correo de reserva al cliente ID {$cliente->cliente_id}: " . $e->getMessage());
+                }
+            }
+        }
+
         return response()->json($reserva, 200);
     }
 

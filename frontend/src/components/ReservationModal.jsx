@@ -165,9 +165,8 @@ export default function ReservationModal({ isOpen, onClose }) {
         ) : (
           <div className="res-success">
             <CheckCircle size={60} className="success-icon" style={{color: '#D4AF37', marginBottom: '20px'}} />
-            <h2>¡Reserva Confirmada!</h2>
-            <p>Hemos separado tu mesa para el <b>{fecha}</b>. Te hemos enviado un correo con los detalles.</p>
-            <button className="btn-confirm-res" onClick={handleFinalClose}>Entendido</button>
+            <h2>¡Hemos Recibido Tu Solicitud!</h2>
+<p>Hemos recibido tu solicitud para el <b>{fecha}</b>. Pronto la revisaremos y te enviaremos un correo de confirmación oficial.</p>            <button className="btn-confirm-res" onClick={handleFinalClose}>Entendido</button>
           </div>
         )}
       </div>

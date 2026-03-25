@@ -10,6 +10,9 @@ import RegistroCliente from './pages/RegistroCliente';
 import ListadoClientes from './pages/ListadoClientes';
 import EditarCliente from './pages/EditarCliente';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import Checkout from './pages/Checkout';
+import PagoExitoso from './pages/PagoExitoso';
+import AdminPedidos from './pages/AdminPedidos';
 
 // Asegúrate de que la ruta del archivo PanelCliente sea correcta según donde lo guardaste
 import PanelCliente from './components/PanelCliente'; 
@@ -48,6 +51,9 @@ function App() {
             <PanelCliente />
           </ProtectedRoute>
         } />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/pago-exitoso" element={<PagoExitoso />} />
+        <Route path="/admin" element={<AdminPedidos />} />
 
       </Routes>
     </BrowserRouter>
