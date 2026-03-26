@@ -7,8 +7,7 @@ export default function RegistroCliente() {
   const [formData, setFormData] = useState({ nombre: '', email: '', password: '', telefono: '' });
   const [errores, setErrores] = useState({});
   
-  // 👇 NUEVOS ESTADOS PARA LA VERIFICACIÓN
-  const [paso, setPaso] = useState(1); // Paso 1 = Registro, Paso 2 = Verificación
+  const [paso, setPaso] = useState(1);
   const [codigoVerificacion, setCodigoVerificacion] = useState('');
 
   const handleChange = (e) => {
@@ -20,13 +19,13 @@ export default function RegistroCliente() {
     if (errores[e.target.name]) setErrores({ ...errores, [e.target.name]: null });
   };
 
-  // PASO 1: ENVIAR DATOS DE REGISTRO
   const handleSubmitRegistro = async (e) => {
     e.preventDefault();
     setErrores({}); 
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/clientes', {
+      // 👇 Usando la variable de entorno
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/clientes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(formData)
@@ -35,7 +34,6 @@ export default function RegistroCliente() {
       const data = await response.json();
 
       if (response.ok) {
-        // ¡Éxito! Cambiamos a la pantalla del código
         setPaso(2);
       } else {
         if (data.errores) setErrores(data.errores);
@@ -46,11 +44,11 @@ export default function RegistroCliente() {
     }
   };
 
-  // PASO 2: VERIFICAR EL CÓDIGO
   const handleSubmitVerificacion = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/clientes/verificar', {
+      // 👇 Usando la variable de entorno
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/clientes/verificar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
@@ -77,7 +75,6 @@ export default function RegistroCliente() {
       <section className="admin-card">
         
         {paso === 1 ? (
-          // ---------------- PANTALLA 1: REGISTRO ----------------
           <>
             <header className="admin-header"><h2>Registro Arboleda</h2></header>
             <form onSubmit={handleSubmitRegistro} className="admin-form">
@@ -122,7 +119,6 @@ export default function RegistroCliente() {
             </form>
           </>
         ) : (
-          // ---------------- PANTALLA 2: VERIFICACIÓN ----------------
           <>
             <header className="admin-header"><h2>Verifica tu Correo</h2></header>
             <form onSubmit={handleSubmitVerificacion} className="admin-form" style={{textAlign: 'center'}}>
@@ -135,7 +131,7 @@ export default function RegistroCliente() {
                 type="text" 
                 maxLength="6" 
                 value={codigoVerificacion} 
-                onChange={(e) => setCodigoVerificacion(e.target.value.replace(/\D/g, ''))} // Solo permite números
+                onChange={(e) => setCodigoVerificacion(e.target.value.replace(/\D/g, ''))} 
                 placeholder="000000"
                 required
                 style={{ 

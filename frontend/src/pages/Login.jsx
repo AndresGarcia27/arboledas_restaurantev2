@@ -11,7 +11,8 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/login', {
+      // 👇 Usando la variable de entorno
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json', 
@@ -23,7 +24,6 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // ✅ 1. Verificamos que sí llegue el usuario
         const userData = data.user;
         
         if (!userData) {
@@ -33,22 +33,17 @@ export default function Login() {
         localStorage.setItem('user', JSON.stringify(userData));
         if (data.token) localStorage.setItem('token', data.token);
         
-        // ✅ 2. LÓGICA DE ROLES (EL SEMÁFORO INTELIGENTE)
-        // Convertimos a Número por si Laravel lo manda como String
         const role = Number(userData.rol || userData.rol_id);
 
         if (role === 1) {
-          navigate('/listado-clientes'); // Admin (Rol 1) va al Panel de Control
+          navigate('/listado-clientes'); 
         } else {
-          // 👇 AQUÍ ESTÁ LA MAGIA 👇
-          navigate('/mis-reservas'); // Cliente (Rol 2) va directo a pedir su mesa
+          navigate('/mis-reservas'); 
         }
 
-        // Recargamos la página para que el Navbar actualice los botones
         window.location.reload(); 
         
       } else {
-        // Mostramos el mensaje que viene del backend
         alert(data.mensaje || data.message || 'Credenciales inválidas');
       }
     } catch (error) {

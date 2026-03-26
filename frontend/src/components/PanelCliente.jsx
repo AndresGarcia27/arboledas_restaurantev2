@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Calendar, LogOut, Home } from 'lucide-react';
-import '../Admin.css'; // Asumo que usas el mismo archivo de estilos
+import '../Admin.css'; 
 
 export default function PanelCliente() {
   const navigate = useNavigate();
@@ -9,15 +9,12 @@ export default function PanelCliente() {
   const [misReservas, setMisReservas] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Estado del formulario (¡Ya no necesitamos cliente_id aquí, lo sacamos del user!)
   const [reservaForm, setReservaForm] = useState({ fecha: '', hora: '', personas: 2 });
 
   useEffect(() => {
-    // 1. Verificamos quién está logueado
     const storedUser = localStorage.getItem('user');
     const usuarioLogueado = (storedUser && storedUser !== "undefined") ? JSON.parse(storedUser) : null;
     
-    // Si no está logueado, lo mandamos al login
     if (!usuarioLogueado) { 
       navigate('/login'); 
       return; 
@@ -27,11 +24,11 @@ export default function PanelCliente() {
     cargarMisReservas(usuarioLogueado.id || usuarioLogueado.cliente_id);
   }, [navigate]);
 
-  // 2. Cargamos solo las reservas de este cliente
   const cargarMisReservas = async (id) => {
     setLoading(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/reservas?cliente_id=${id}`);
+      // 👇 Usando la variable de entorno
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/reservas?cliente_id=${id}`);
       if (res.ok) {
         setMisReservas(await res.json());
       }
@@ -42,11 +39,9 @@ export default function PanelCliente() {
     }
   };
 
-  // 3. Función para enviar la nueva reserva
   const hacerReserva = async (e) => {
     e.preventDefault();
     
-    // Preparamos los datos sumando el ID del usuario en sesión
     const datosParaEnviar = {
       ...reservaForm,
       cliente_id: user.id || user.cliente_id,
@@ -54,7 +49,8 @@ export default function PanelCliente() {
     };
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/reservas', {
+      // 👇 Usando la variable de entorno
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/reservas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(datosParaEnviar)
@@ -62,8 +58,8 @@ export default function PanelCliente() {
 
       if (res.ok) {
         alert("¡Reserva solicitada con éxito! Revisa tu correo electrónico.");
-        setReservaForm({ fecha: '', hora: '', personas: 2 }); // Limpiamos el formulario
-        cargarMisReservas(user.id || user.cliente_id); // Recargamos la tabla
+        setReservaForm({ fecha: '', hora: '', personas: 2 }); 
+        cargarMisReservas(user.id || user.cliente_id); 
       } else {
         alert("Hubo un error al procesar tu reserva.");
       }
@@ -99,7 +95,6 @@ export default function PanelCliente() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px', padding: '20px' }}>
           
-          {/* COLUMNA IZQUIERDA: FORMULARIO */}
           <section className="admin-card" style={{ height: 'fit-content' }}>
             <h3 style={{marginTop: 0, marginBottom: '20px'}}>Solicitar Nueva Mesa</h3>
             <form onSubmit={hacerReserva} className="admin-form">
@@ -116,7 +111,6 @@ export default function PanelCliente() {
             </form>
           </section>
 
-          {/* COLUMNA DERECHA: HISTORIAL DE RESERVAS */}
           <section className="table-container">
             <h3 style={{marginTop: 0, marginBottom: '20px'}}>Mi Historial de Reservas</h3>
             {loading ? ( <div style={{color: '#d4af37'}}>Cargando...</div> ) : (
