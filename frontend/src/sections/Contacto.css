@@ -28,7 +28,7 @@
   bottom: -5px;
   width: 30px;
   height: 2px;
-  background-color: var(--gold); /* Cambiado a dorado para más lujo */
+  background-color: var(--gold);
 }
 
 .address-item {
@@ -78,7 +78,8 @@
 .hours-list span {
   color: #fff;
   font-weight: 500;
-  width: 85px;
+  width: 90px;
+  display: inline-block;
 }
 
 .gold-text {
@@ -86,10 +87,11 @@
   font-weight: bold !important;
 }
 
-.hours-list .closed {
-  color: #884444;
+.closed {
+  color: #884444; 
   font-style: italic;
-  border-bottom: none;
+  margin-top: 5px;
+  border-bottom: none !important;
 }
 
 .icon-sm {
@@ -136,23 +138,20 @@
   transform: translateY(-3px);
 }
 
-.map-placeholder {
-  background: linear-gradient(45deg, #0a0a0a, #151515);
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* 👇 NUEVOS ESTILOS DEL MAPA 👇 */
+.map-container {
+  width: 100%;
+  height: 200px;
   border-radius: 4px;
-  color: #444;
-  font-size: 0.8rem;
+  overflow: hidden;
   border: 1px solid #222;
-  cursor: pointer;
   transition: 0.3s;
+  background-color: #111; /* Color de fondo mientras carga */
 }
 
-.map-placeholder:hover {
+.map-container:hover {
   border-color: var(--gold);
-  color: var(--gold);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
 .footer-copyright {
@@ -161,25 +160,4 @@
   border-top: 1px solid #111;
   color: #333;
   font-size: 0.8rem;
-}
-
-/* Dentro de Contacto.css */
-
-.gold-text {
-  color: var(--gold) !important; /* Brilla en dorado para resaltar el horario extendido */
-  font-weight: bold;
-}
-
-.hours-list span {
-  color: #fff;
-  font-weight: 500;
-  width: 90px; /* Un poco más de espacio para que no se amontone */
-  display: inline-block;
-}
-
-.closed {
-  color: #884444; /* Rojo vino sutil para el lunes */
-  font-style: italic;
-  margin-top: 5px;
-  border-bottom: none !important;
 }

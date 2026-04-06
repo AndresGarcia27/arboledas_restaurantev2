@@ -33,11 +33,11 @@ export const Contacto = () => {
             <h3>Visítanos</h3>
             <p className="address-item">
               <MapPin size={18} className="icon" />
-              Calle 10A #43-07<br />El Poblado, Medellín
+              Cl. 92 #50B-13<br /> Aranjuez, Medellín, Antioquia, Colombia
             </p>
             <p className="address-item">
               <Phone size={18} className="icon" />
-              +57 (300) 123-4567
+              +57 42361106
             </p>
             <button className="btn-reserve" onClick={() => setIsModalOpen(true)}>
               Reservar Mesa
@@ -70,8 +70,19 @@ export const Contacto = () => {
               <a href="https://instagram.com" target="_blank" rel="noreferrer"><Instagram /></a>
               <a href="https://facebook.com" target="_blank" rel="noreferrer"><Facebook /></a>
             </div>
-            <div className="map-placeholder" onClick={() => window.open('https://maps.google.com', '_blank')}>
-              <span>Abrir en Google Maps</span>
+            
+            {/* 👇 NUEVO MAPA INTERACTIVO 👇 */}
+            <div className="map-container">
+              <iframe 
+                title="Mapa de Arboleda Restaurante"
+                src="https://maps.google.com/maps?q=Cl.%2092%20%2350B-13,%20Aranjuez,%20Medell%C3%ADn,%20Antioquia,%20Colombia&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen="" 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </div>
 

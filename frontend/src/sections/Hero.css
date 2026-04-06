@@ -24,6 +24,11 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.6); /* Negro con 60% de opacidad */
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12vh; /* Empuja elegantemente el contenido hacia abajo */
 }
 
 /* Contenedor del texto y botones */
@@ -48,9 +53,9 @@
   font-family: var(--font-serif); /* Playfair Display */
   color: var(--white); /* El título grande en blanco */
   font-size: 7rem; /* Tamaño extra grande */
-  font-weight: 700;
-  margin-bottom: 30px;
-  letter-spacing: -2px;
+  font-weight: 600; /* Más estilizado y elegante */
+  margin-bottom: 20px;
+  letter-spacing: 2px; /* Mayor espacio entre letras para que respire */
 }
 
 .hero-desc {

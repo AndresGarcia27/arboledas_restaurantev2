@@ -1,9 +1,5 @@
 import { Leaf } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import './Tradicion.css';
-<Link to="/clientes" className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 font-bold">
-  Admin Clientes
-</Link>
 
 export const Tradicion = () => {
   return (
@@ -26,15 +22,15 @@ export const Tradicion = () => {
             No servimos solo comida; servimos memoria. Cada ingrediente es 
             cultivado por campesinos locales, respetando los ciclos de la tierra.
           </p>
-          <button className="btn-story">Conoce nuestra historia</button>
         </div>
 
         {/* Columna de Imágenes (Collage) */}
         <div className="tradicion-images">
+          {/* Nueva imagen principal de alta calidad */}
           <img 
-            src="https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=600&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=800&auto=format&fit=crop" 
             className="img-main" 
-            alt="" 
+            alt="Interior elegante del restaurante" 
           />
           <img 
             src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=400&auto=format&fit=crop" 

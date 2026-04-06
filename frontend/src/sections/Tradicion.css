@@ -39,23 +39,6 @@
   font-size: 1.05rem;
 }
 
-.btn-story {
-  background: transparent;
-  border: 1px solid var(--gold);
-  color: var(--gold);
-  padding: 12px 30px;
-  margin-top: 20px;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.btn-story:hover {
-  background: var(--gold);
-  color: #000;
-}
-
 /* Estilos de las Imágenes (Efecto Collage) */
 .tradicion-images {
   flex: 1;

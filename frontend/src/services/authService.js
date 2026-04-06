@@ -1,13 +1,17 @@
 // src/services/authService.js
 
-const API_URL = '[http://127.0.0.1:8000]'; // Cambia esto por la URL real de tu backend
+// Conectamos automáticamente con la URL de Railway que pusiste en tu .env
+const API_URL = import.meta.env.VITE_API_URL; 
 
 export const loginUsuario = async (email, password) => {
   try {
+    // IMPORTANTE: Verifica si tu ruta en Laravel es /login o /auth/login.
+    // Lo dejé como /login para que coincida con tu imagen anterior.
     const response = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json', // 👈 Línea mágica para evitar la pantalla roja de Laravel
       },
       // Convertimos los datos a texto JSON para enviarlos
       body: JSON.stringify({ email, password }), 
@@ -36,11 +40,12 @@ export const logoutUsuario = () => {
   localStorage.removeItem('arboledas_token');
   localStorage.removeItem('arboledas_user');
 };
-// Añade esto al final de src/services/authService.js
+
 export const obtenerCabecerasConToken = () => {
   const token = localStorage.getItem('arboledas_token');
   return {
     'Content-Type': 'application/json',
+    'Accept': 'application/json', // 👈 También la ponemos aquí para proteger el resto de la app
     'Authorization': token ? `Bearer ${token}` : ''
   };
 };
